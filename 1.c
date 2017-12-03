@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "common.h"
+
 static uint8_t *str = 0;
 static uint16_t counter = 0;
 
@@ -15,10 +17,6 @@ void nextChar()
     counter++;
 }
 
-uint8_t charToInt(uint8_t ch)
-{
-    return ch - '0';
-}
 
 uint8_t readInt() {
     uint8_t result = 0;
