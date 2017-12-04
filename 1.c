@@ -29,12 +29,9 @@ uint8_t readInt() {
 
 uint8_t readNext() {
     uint8_t result = 0;
-    if (str[counter+1] != 0) {
-        result = charToInt(str[counter+1]);
-    }
-    else {
-        result = charToInt(str[0]);
-    }
+    uint16_t offset = (str[counter+1] != 0) ? counter+1 : 0;
+    
+    result = charToInt(str[offset]);
     
     return result;
 }
