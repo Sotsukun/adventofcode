@@ -18,12 +18,14 @@ typedef enum {
 
 /* Statics */
 static uint8_t *pString = NULL;
+static uint8_t *pLine = NULL;
 
 
 /* Functions */
 void setString(uint8_t *pStr)
 {
     pString = pStr;
+    pLine = pStr;
 }
 
 readLineResult_t readInt(uint16_t *pNum)
@@ -82,12 +84,29 @@ void moveToNextLine()
         pString++;
     }
     pString++;
+    pLine = pString;
+}
+
+void returnToStartOfLine()
+{
+    pString = pLine;
 }
 
 bool isEndOfFile()
 {
     return *pString == '\0';
 }
+
+void lineToNums(uint16_t *nums)
+{
+    uint16_t i =0;
+    
+    while(!isEndLine()) {
+        readInt(&nums[i]);
+        i++;
+    }
+}
+
 
 uint16_t getLineDiff()
 {
@@ -108,6 +127,25 @@ uint16_t getLineDiff()
     return maxVal - minVal;
 }
 
+uint16_t getLineDiv()
+{
+    uint16_t nums[16] = {0};
+    uint16_t result = 0;
+    
+    lineToNums(nums);
+    
+    for(uint8_t i=0; i<16; i++) {
+        for(uint8_t j=0; j<16; j++) {
+            if((nums[i] % nums[j] == 0) && (i != j)) {
+                result = nums[i]/nums[j];
+            }
+        }
+    }
+    
+    moveToNextLine();
+    
+    return result;
+}
 
 int main(int argc, char *argv[])
 {
@@ -138,4 +176,17 @@ int main(int argc, char *argv[])
     }
     
     printf("Checksum: %d\r\n", num);
+    
+    
+    num = 0;
+    setString(numbers);
+    
+    while(!isEndOfFile())
+    {
+        uint16_t diff = getLineDiv();
+        num += diff;
+    }
+    
+    printf("Checksum: %d\r\n", num);
 }
+
